@@ -25,7 +25,7 @@ gdnative_api_struct.gen.h
 
 headerFilter = gdnative/*.h arvr/*.h nativescript/*.h pluginscript/*.h *.gen.h
 
-compilerOpts = -fPIC -I./godot_headers -std=c99
+compilerOpts = -I./godot_headers -std=c99
 
 nonStrictEnums = GDNATIVE_API_TYPES
 

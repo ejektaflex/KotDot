@@ -29,24 +29,23 @@ fun simpleDestructor(godotObject: COpaquePointer?, methodData: COpaquePointer?, 
     return ret.readValue()
 }*/
 
-object GDNative {
-    var apiPointer: CPointer<godot_gdnative_core_api_struct>? = null
-    var initialized: Boolean = false
-}
 
-object NativeScript {
-    var apiPointer: CPointer<godot_gdnative_ext_nativescript_api_struct>? = null
-    var initialized: Boolean = false
-}
+internal class GDNativeContainer(var apiPointer: CPointer<godot_gdnative_core_api_struct>? = null, var initialized: Boolean = false)
+
+private val GDNative = GDNativeContainer()
+
+internal class NativeScriptContainer(
+        var apiPointer: CPointer<godot_gdnative_ext_nativescript_api_struct>? = null,
+        var initialized: Boolean = false
+)
+
+private val NativeScript = NativeScriptContainer()
 
 @ExportForCppRuntime
 @CName("godot_gdnative_init")
 fun godotGDnativeInit(options: CPointer<godot_gdnative_init_options>?) {
+    println("Godot-Kotlin GDNative Init..")
 
-
-    //println("godot_gdnative_init")
-
-    // PROBLEM CODE:
     GDNative.apiPointer = options!!.pointed.api_struct
 
     
@@ -68,17 +67,14 @@ fun godotGDnativeInit(options: CPointer<godot_gdnative_init_options>?) {
     }
 
      */
-
+    println("Godot-Kotlin GDNative Init Completed")
 }
 
-fun doot() {
-    //godot_gdnative_init_fn
-}
 
 @ExportForCppRuntime
 @CName("godot_nativescript_init")
 fun godotNativescriptInit(pHandle: COpaquePointer?) {
-    println("godot_nativescript_init")
+    println("Godot-Kotlin NativeScript Init..")
     val instanceFunc = nativeHeap.alloc<godot_instance_create_func>()
     instanceFunc.create_func = staticCFunction(::createSimpleClass)
     val destroy = nativeHeap.alloc<godot_instance_destroy_func>()
@@ -86,6 +82,7 @@ fun godotNativescriptInit(pHandle: COpaquePointer?) {
 
     val nativeApi = NativeScript.apiPointer?.pointed
     nativeApi?.godot_nativescript_register_class?.invoke(pHandle, CLASS_NAME, REFERENCE_VALUE, instanceFunc.readValue(), destroy.readValue())
+    println("Godot-Kotlin NativeScript Init Completed")
 }
 
 /*
