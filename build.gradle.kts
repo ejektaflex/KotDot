@@ -10,7 +10,7 @@ repositories {
 
 kotlin {
 
-    /*
+
     // Determine host preset.
     val hostOs = System.getProperty("os.name")
 
@@ -21,10 +21,9 @@ kotlin {
         hostOs.startsWith("Windows") -> mingwX64("native")
         else -> throw GradleException("Host OS '$hostOs' is not supported in Kotlin/Native $project.")
     }
+     
 
-     */
-
-    mingwX64("native") {
+    hostTarget.apply {
         val main by compilations.getting
         val interop by main.cinterops.creating
         

@@ -14,31 +14,17 @@ fun simpleDestructor(godotObject: COpaquePointer?, methodData: COpaquePointer?, 
 }
 
 
-
-/*fun simpleGetData(pInstance: COpaquePointer?, pMethodData: COpaquePointer?, pUserData: COpaquePointer?,
-                  pNumArgs: Int, godotVariant: COpaquePointer?): CValue<godot_variant> {
-    //godot_variant **p_args)
-    val data = nativeHeap.alloc<godot_string>()
-    val ret = nativeHeap.alloc<godot_variant>()
-    val userDataPrt = pUserData!!.reinterpret<user_data_struct>()
-    val userData = userDataPrt.pointed
-    godot_string_new(data.ptr)
-    godot_string_parse_utf8(data.ptr, userData.data.toKString())
-    godot_variant_new_string(ret.ptr, data.ptr)
-    godot_string_destroy(data.ptr)
-    return ret.readValue()
-}*/
-
-
-internal class GDNativeContainer(var apiPointer: CPointer<godot_gdnative_core_api_struct>? = null, var initialized: Boolean = false)
-
-private val GDNative = GDNativeContainer()
+internal class GDNativeContainer(
+        var apiPointer: CPointer<godot_gdnative_core_api_struct>? = null,
+        var initialized: Boolean = false
+)
 
 internal class NativeScriptContainer(
         var apiPointer: CPointer<godot_gdnative_ext_nativescript_api_struct>? = null,
         var initialized: Boolean = false
 )
 
+private val GDNative = GDNativeContainer()
 private val NativeScript = NativeScriptContainer()
 
 @ExportForCppRuntime
@@ -47,16 +33,9 @@ fun godotGDnativeInit(options: CPointer<godot_gdnative_init_options>?) {
     println("Godot-Kotlin GDNative Init..")
 
     GDNative.apiPointer = options!!.pointed.api_struct
+    GDNative.initialized = true
 
-    
-    //GDNative.initialized = true
-
-
-
-    //val api = GDNative.apiPointer!!.pointed
-
-    /*
-
+    val api = GDNative.apiPointer!!.pointed
 
     for (i in 0 until api.num_extensions.toInt()) {
         val extension = api.extensions!![i]!!.pointed
@@ -66,7 +45,8 @@ fun godotGDnativeInit(options: CPointer<godot_gdnative_init_options>?) {
         }
     }
 
-     */
+    println("Godot-Kotlin GDNative API Initialized: ${GDNative.initialized}")
+    println("Godot-Kotlin NativeScript API Initial: ${NativeScript.initialized}")
     println("Godot-Kotlin GDNative Init Completed")
 }
 
@@ -85,17 +65,17 @@ fun godotNativescriptInit(pHandle: COpaquePointer?) {
     println("Godot-Kotlin NativeScript Init Completed")
 }
 
-/*
+
+
 @ExportForCppRuntime
 @CName("godot_gdnative_terminate")
 fun godotGDnativeTerminate(options: CPointer<godot_gdnative_init_options>) {
-    println("godot_gdnative_terminate")
+    println("Godot-Kotlin Terminate Init..")
     GDNative.apiPointer = null
     GDNative.initialized = false
     NativeScript.apiPointer = null
     NativeScript.initialized = false
+    println("Godot-Kotlin Terminate Init Completed")
 }
 
-
- */
 
