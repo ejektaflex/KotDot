@@ -1,7 +1,7 @@
 import kotlinx.cinterop.*
-import GodotApi.*
+import interop.*
 import platform.posix.strcpy
-import konan.internal.*
+import kotlin.native.internal.ExportForCppRuntime
 
 fun createSimpleClass(godotObject: COpaquePointer?, data: COpaquePointer?): COpaquePointer? {
     val userData = nativeHeap.alloc<user_data_struct>()
@@ -12,6 +12,8 @@ fun createSimpleClass(godotObject: COpaquePointer?, data: COpaquePointer?): COpa
 fun simpleDestructor(godotObject: COpaquePointer?, methodData: COpaquePointer?, userData: COpaquePointer?) {
     nativeHeap.free(userData!!.rawValue)
 }
+
+
 
 /*fun simpleGetData(pInstance: COpaquePointer?, pMethodData: COpaquePointer?, pUserData: COpaquePointer?,
                   pNumArgs: Int, godotVariant: COpaquePointer?): CValue<godot_variant> {
@@ -38,50 +40,57 @@ object NativeScript {
 }
 
 @ExportForCppRuntime
-@konan.internal.CName("godot_gdnative_init")
+@CName("godot_gdnative_init")
 fun godotGDnativeInit(options: CPointer<godot_gdnative_init_options>?) {
-    println("godot_gdnative_init")
+
+
+    //println("godot_gdnative_init")
+
+    // PROBLEM CODE:
     GDNative.apiPointer = options!!.pointed.api_struct
-    GDNative.initialized = true
 
-    val api = GDNative.apiPointer!!.pointed
+    
+    //GDNative.initialized = true
 
-    loop@ for (i in 0 until api.num_extensions) {
+
+
+    //val api = GDNative.apiPointer!!.pointed
+
+    /*
+
+
+    for (i in 0 until api.num_extensions.toInt()) {
         val extension = api.extensions!![i]!!.pointed
         if (extension.type == GDNATIVE_EXT_NATIVESCRIPT) {
             NativeScript.apiPointer = api.extensions!![i]!!.reinterpret()
             NativeScript.initialized = true
         }
     }
+
+     */
+
+}
+
+fun doot() {
+    //godot_gdnative_init_fn
 }
 
 @ExportForCppRuntime
-@konan.internal.CName("godot_nativescript_init")
+@CName("godot_nativescript_init")
 fun godotNativescriptInit(pHandle: COpaquePointer?) {
     println("godot_nativescript_init")
     val instanceFunc = nativeHeap.alloc<godot_instance_create_func>()
     instanceFunc.create_func = staticCFunction(::createSimpleClass)
-    val destoryFunc = nativeHeap.alloc<godot_instance_destroy_func>()
-    destoryFunc.destroy_func = staticCFunction(::simpleDestructor)
+    val destroy = nativeHeap.alloc<godot_instance_destroy_func>()
+    destroy.destroy_func = staticCFunction(::simpleDestructor)
 
     val nativeApi = NativeScript.apiPointer?.pointed
-    nativeApi?.godot_nativescript_register_class?.invoke(pHandle, CLASS_NAME, REFERENCE_VALUE, instanceFunc.readValue(), destoryFunc.readValue())
-
-    // godot_nativescript_register_property(pHandle, "SIMPLE")
-
-    /* val methodInstance = nativeHeap.alloc<godot_instance_method>()
-     methodInstance.method = staticCFunction(::simpleGetData)
-
-     val attributes = nativeHeap.alloc<godot_method_attributes>()
-     attributes.rpc_type = godot_method_rpc_mode.GODOT_METHOD_RPC_MODE_DISABLED
-
-     godot_nativescript_register_method(pHandle, "SIMPLE", "get_data",
-             attributes.readValue(), methodInstance.readValue())*/
-
+    nativeApi?.godot_nativescript_register_class?.invoke(pHandle, CLASS_NAME, REFERENCE_VALUE, instanceFunc.readValue(), destroy.readValue())
 }
 
+/*
 @ExportForCppRuntime
-@konan.internal.CName("godot_gdnative_terminate")
+@CName("godot_gdnative_terminate")
 fun godotGDnativeTerminate(options: CPointer<godot_gdnative_init_options>) {
     println("godot_gdnative_terminate")
     GDNative.apiPointer = null
@@ -89,3 +98,7 @@ fun godotGDnativeTerminate(options: CPointer<godot_gdnative_init_options>) {
     NativeScript.apiPointer = null
     NativeScript.initialized = false
 }
+
+
+ */
+
