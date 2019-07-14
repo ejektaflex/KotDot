@@ -22,9 +22,31 @@ data class GodotClass(
 
         val methods: MutableList<GodotMethod>,
 
-        val baseClassGodot: GodotClass? = null
+        val properties: MutableList<GodotProperty>,
+
+        var baseClassGodot: GodotClass? = null
 
 ) {
+
+    /*
+    Returns a list of all superclasses, including the current class
+     */
+    val superclasses: List<GodotClass>
+        get() {
+            return listOf(this) + if (baseClassGodot == null) {
+                listOf()
+            } else {
+                baseClassGodot!!.superclasses
+            }
+        }
+
+    val essentialMethods: List<GodotMethod>
+        get() {
+            return methods.filter { method ->
+                method.name !in properties.map { it.getter }
+                        && method.name !in properties.map { it.setter }
+            }
+        }
 
     fun generate(): String {
 
@@ -35,7 +57,10 @@ data class GodotClass(
                 // Header / Primary Constructor
 
                 addModifiers(KModifier.OPEN)
-                superclass(ClassName("structure", baseClass))
+
+                baseClassGodot?.let {
+                    superclass(ClassName("structure", it.name))
+                }
 
                 if (instantiable) {
                     addFunction(
@@ -71,13 +96,15 @@ data class GodotClass(
                 // Body
 
 
-                // Constants
+                // Constants (should be done but get in the way a lot, so are commented out for now)
 
+                /*
                 for (constant in constants) {
                     addProperty(
                         PropertySpec.builder(constant.key, Long::class, KModifier.CONST).initializer(constant.value.toString()).build()
                     )
                 }
+                 */
 
 
 

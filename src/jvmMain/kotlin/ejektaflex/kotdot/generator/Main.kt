@@ -4,14 +4,17 @@ import ejektaflex.kotdot.generator.json.structure.ClassRegistry
 
 fun main() {
 
-    val simpleNode = ClassRegistry["Node"]
+    fun describeClass(named: String) {
+        val nodeClazz = ClassRegistry[named]!!
+        println("Generated Class Data:")
+        println(nodeClazz.generate())
+        println("(Essential Methods  : ${nodeClazz.essentialMethods.size})")
+        println("(Total Methods      : ${nodeClazz.methods.size})")
+        println("(Properties         : ${nodeClazz.properties.size})")
+        println("(Base Class         : ${nodeClazz.name})")
+        println("(Superclasses       : ${nodeClazz.superclasses.joinToString("->") { it.name }})")
+    }
 
-    println(simpleNode!!.baseClassGodot)
-
-    val nodeClazz = ClassRegistry.entries.first { it.value.name == "Node" }.value
-
-    println(nodeClazz.generate())
-
-    println("(Methods: ${nodeClazz.methods})")
+    describeClass("YSort")
 
 }
