@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("multiplatform") version "1.3.21"
+    kotlin("multiplatform") version "1.3.41"
 }
 
 repositories {
@@ -10,6 +10,17 @@ repositories {
 
 kotlin {
 
+    jvm {
+        withJava()
+    }
+
+    sourceSets {
+        val jvmMain by getting {
+            dependencies {
+                api("com.squareup:kotlinpoet:1.3.0")
+            }
+        }
+    }
 
     // Determine host preset.
     val hostOs = System.getProperty("os.name")
@@ -21,7 +32,6 @@ kotlin {
         hostOs.startsWith("Windows") -> mingwX64("native")
         else -> throw GradleException("Host OS '$hostOs' is not supported in Kotlin/Native $project.")
     }
-     
 
     hostTarget.apply {
         val main by compilations.getting
@@ -33,6 +43,7 @@ kotlin {
             }
         }
     }
+
 }
 
 
