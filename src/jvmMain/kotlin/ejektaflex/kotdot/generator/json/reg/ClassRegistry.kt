@@ -1,6 +1,7 @@
-package ejektaflex.kotdot.generator.json.structure
+package ejektaflex.kotdot.generator.json.reg
 
 import com.google.gson.Gson
+import ejektaflex.kotdot.generator.json.structure.GodotClass
 import kotdot.registry.SimpleRegistry
 import java.io.File
 

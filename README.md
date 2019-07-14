@@ -9,7 +9,7 @@ Checklist:
 
  - [x] Simple shared/dynamic library creation
  - [ ] Read API file and use KotlinPoet to translate API JSON data into Kotlin classes
- - [ ] Read Core classes file API JSON and translate into Kotlin classes
+ - [ ] Read built in types file API JSON and translate into Kotlin classes
  - [ ] Automatic conversion of Kotlin files into GDNS files on build
 
 # Setup
