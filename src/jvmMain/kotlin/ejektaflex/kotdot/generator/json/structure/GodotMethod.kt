@@ -1,11 +1,8 @@
 package ejektaflex.kotdot.generator.json.structure
 
 import com.google.gson.annotations.SerializedName
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.FunSpec
-import com.squareup.kotlinpoet.TypeName
-import com.squareup.kotlinpoet.TypeSpec
-import com.squareup.kotlinpoet.jvm.jvmWildcard
+import com.squareup.kotlinpoet.*
+import ejektaflex.kotdot.generator.json.NativeCommon
 import ejektaflex.kotdot.generator.json.reg.TypeRegistry
 
 data class GodotMethod(
@@ -15,7 +12,9 @@ data class GodotMethod(
     val returnType: String = "void",
 
     @SerializedName("is_virtual")
-    val isVirtual: Boolean = false
+    val isVirtual: Boolean = false,
+
+    val arguments: List<GodotArgument>
 
 )  {
 
@@ -24,21 +23,67 @@ data class GodotMethod(
     val bindingName: String
         get() = "${parentClass.name}::$name"
 
+    val returnTypeName: TypeName
+        get() {
+            return if (returnType.startsWith("enum")) {
+                TypeRegistry.lookup("void")
+            } else {
+                TypeRegistry.lookup(returnType)
+            }
+        }
+
+
+    private fun genPtrCall(builder: FunSpec.Builder) {
+        builder.apply {
+
+            // Return block
+            if (returnType != "void") {
+                addCode(CodeBlock.of("%L",
+                        PropertySpec.builder("taco1", returnTypeName)))
+            }
+
+
+            beginControlFlow("memScoped")
+
+
+            addComment(returnTypeName.toString())
+
+            if (arguments.isNotEmpty()) {
+                addStatement("val args = allocArray<${NativeCommon.copaquevar.simpleName}>(${arguments.size + 1})")
+
+                arguments.forEachIndexed { i, argument ->
+                    addStatement("args[$i] = null // TODO setting memory")
+                }
+
+                addStatement("args[${arguments.size}] = null")
+            }
+
+
+            endControlFlow()
+
+        }
+    }
+
 
     fun generate(): FunSpec.Builder {
 
 
-        val toRet = if (returnType.startsWith("enum")) {
-            TypeRegistry.lookup("void")
-        } else {
-            TypeRegistry.lookup(returnType)
-        }
+
 
 
         val func = FunSpec.builder(name).apply {
-            returns(toRet)
+            returns(returnTypeName)
 
-            addComment("${parentClass.name}::$name")
+
+            // Add arguments to constructor
+
+            for (arg in arguments) {
+                addParameter(
+                        ParameterSpec.builder(arg.name, TypeRegistry.lookup(arg.type)).build()
+                )
+            }
+
+            genPtrCall(this)
 
         }
 

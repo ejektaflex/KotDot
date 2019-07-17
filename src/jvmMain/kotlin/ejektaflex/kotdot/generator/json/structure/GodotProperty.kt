@@ -7,4 +7,7 @@ data class GodotProperty(
         val setter: String,
         val index: Int
 ) {
+
+    // remember .mutable for PropertySpec builders!
+
 }

@@ -20,6 +20,9 @@ fun main() {
     describeClass("Container")
 
 
+    println(ClassRegistry["Container"]!!.methods.first { it.name == "fit_child_in_rect" }.arguments.first())
+
+
     /*
     for (item in TypeRegistry) {
         println("${item.key} -> ${item.value}")
