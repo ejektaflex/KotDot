@@ -1,7 +1,12 @@
 package ejektaflex.kotdot.generator.json.structure
 
 import com.google.gson.annotations.SerializedName
+import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.TypeName
+import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.jvm.jvmWildcard
+import ejektaflex.kotdot.generator.json.reg.TypeRegistry
 
 data class GodotMethod(
     val name: String = "UNDEF_NAME",
@@ -14,21 +19,36 @@ data class GodotMethod(
 
 )  {
 
+    lateinit var parentClass: GodotClass
 
-    fun generate(godotClass: GodotClass): String {
-        return buildString {
-
-            val func = FunSpec.constructorBuilder()
+    val bindingName: String
+        get() = "${parentClass.name}::$name"
 
 
-            if (!isVirtual) {
-                appendln(
+    fun generate(): FunSpec.Builder {
 
-                )
-            }
 
+        val toRet = if (returnType.startsWith("enum")) {
+            TypeRegistry.lookup("void")
+        } else {
+            TypeRegistry.lookup(returnType)
+        }
+
+
+        val func = FunSpec.builder(name).apply {
+            returns(toRet)
+
+            addComment("${parentClass.name}::$name")
 
         }
+
+
+        if (!isVirtual) {
+
+        }
+
+        return func
+
     }
 
 }

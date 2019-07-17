@@ -93,7 +93,36 @@ data class GodotClass(
                         .build()
                 )
 
+                // Companion Object
+
+                val companion = TypeSpec.companionObjectBuilder()
+
+
+
                 // Body
+
+                for (essMethod in essentialMethods) {
+                    addFunction(
+                            essMethod.generate().build()
+                    )
+
+                    // Add binding properties
+                    companion.addProperty(
+                            PropertySpec.builder(
+                                    "bind_${essMethod.name}",
+                                    NativeCommon.godotBind
+                            ).apply {
+                                initializer("BindMap[\"${essMethod.bindingName}\"]")
+                            }.build()
+                    )
+
+                }
+
+                // Companion Object
+
+
+
+                addType(companion.build())
 
 
                 // Constants (should be done but get in the way a lot, so are commented out for now)
