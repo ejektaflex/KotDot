@@ -9,12 +9,17 @@ import kotlin.reflect.KType
 import kotlin.reflect.full.createType
 
 object TypeRegistry : SimpleRegistry<String, KType>() {
+
+    val primitives = mutableListOf<String>()
+
     init {
         mapOf(
                 "void" to Unit::class.createType(),
                 "bool" to Boolean::class.createType(),
-                "float" to Float::class.createType()
+                "float" to Double::class.createType(),
+                "int" to Long::class.createType()
         ).forEach { t, u ->
+            primitives.add(t)
             delegate[t] = u
         }
     }

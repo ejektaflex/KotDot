@@ -11,6 +11,7 @@ object NativeCommon {
     val cpointer = ClassName(cinterop, "CPointer")
     val copaquevar = ClassName(cinterop, "COpaquePointerVar")
     val godotBind = ClassName(godot, "CPointer<godot_method_bind>")
+    val memscope = ClassName(cinterop, "MemScope")
 
     fun cPointerArray(contentClass: String): ClassName {
         return ClassName(cinterop, "CArrayPointer<$contentClass>")

@@ -62,6 +62,7 @@ data class GodotClass(
                     superclass(ClassName("structure", it.name))
                 }
 
+                /*
                 if (instantiable) {
                     addFunction(
                         FunSpec.constructorBuilder()
@@ -76,6 +77,7 @@ data class GodotClass(
                             .build()
                     )
                 }
+                 */
 
                 addFunction(
                     FunSpec.constructorBuilder()
@@ -85,6 +87,7 @@ data class GodotClass(
                         .build()
                 )
 
+                /*
                 addFunction(
                     FunSpec.constructorBuilder()
                         .addModifiers(KModifier.INTERNAL)
@@ -92,6 +95,7 @@ data class GodotClass(
                         .callSuperConstructor("name")
                         .build()
                 )
+                 */
 
                 // Companion Object
 
@@ -112,6 +116,7 @@ data class GodotClass(
                                     "bind_${essMethod.name}",
                                     NativeCommon.godotBind
                             ).apply {
+                                addModifiers(KModifier.PRIVATE)
                                 initializer("BindMap[\"${essMethod.bindingName}\"]")
                             }.build()
                     )

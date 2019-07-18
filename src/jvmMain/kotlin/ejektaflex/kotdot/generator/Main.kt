@@ -17,10 +17,7 @@ fun main() {
         println("(Superclasses       : ${nodeClazz.superclasses.joinToString("->") { it.name }})")
     }
 
-    describeClass("Container")
-
-
-    println(ClassRegistry["Container"]!!.methods.first { it.name == "fit_child_in_rect" }.arguments.first())
+    describeClass("Area")
 
 
     /*

@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.squareup.kotlinpoet.*
 import ejektaflex.kotdot.generator.json.NativeCommon
 import ejektaflex.kotdot.generator.json.reg.TypeRegistry
+import kotlin.reflect.KClass
 
 data class GodotMethod(
     val name: String = "UNDEF_NAME",
@@ -38,25 +39,42 @@ data class GodotMethod(
 
             // Return block
             if (returnType != "void") {
-                addCode(CodeBlock.of("%L",
-                        PropertySpec.builder("taco1", returnTypeName)))
+                addCode(
+                        CodeBlock.of("%L", PropertySpec.builder(
+                                "toReturn",
+                                returnTypeName
+                        ).apply {
+                            addModifiers(KModifier.LATEINIT)
+                            mutable()
+                        }.build())
+                ).build()
             }
 
+            addComment(returnTypeName.toString())
 
             beginControlFlow("memScoped")
 
 
-            addComment(returnTypeName.toString())
 
             if (arguments.isNotEmpty()) {
                 addStatement("val args = allocArray<${NativeCommon.copaquevar.simpleName}>(${arguments.size + 1})")
 
+
                 arguments.forEachIndexed { i, argument ->
-                    addStatement("args[$i] = null // TODO setting memory")
+                    addStatement("args[$i] = " + when (argument.type) {
+                        "bool" -> "cValuesOf(${argument.name}.toByte()).getPointer(memScope)"
+                        "float", "long", "int" -> "cValuesOf(${argument.name}).getPointer(memScope)"
+                        else -> "${argument.name}.getMemory(memScope)"
+                    })
                 }
 
                 addStatement("args[${arguments.size}] = null")
+
+                // TODO change null if valid return value
+                addStatement("godot_method_bind_ptrcall(bind_$name, getMemory(), args, null)")
+
             }
+
 
 
             endControlFlow()
