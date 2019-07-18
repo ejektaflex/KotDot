@@ -15,11 +15,7 @@ object BindMap {
     }
 
     operator fun get(key: String): CPointer<godot_method_bind> {
-        return if (key in content) {
-            content[key]!!
-        } else {
-            makeBind(key)
-        }
+        return content[key] ?: makeBind(key)
     }
 
 }
