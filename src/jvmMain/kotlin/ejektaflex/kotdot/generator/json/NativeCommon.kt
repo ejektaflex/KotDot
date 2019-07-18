@@ -1,8 +1,35 @@
 package ejektaflex.kotdot.generator.json
 
 import com.squareup.kotlinpoet.ClassName
+import ejektaflex.kotdot.generator.json.structure.GodotClass
+import ejektaflex.kotdot.generator.json.structure.GodotMethod
+import ejektaflex.kotdot.generator.json.structure.GodotProperty
 
 object NativeCommon {
+
+    val godotVersion = "3.1"
+    val language = "en"
+
+    fun propertyUrl(clazz: GodotClass, prop: GodotProperty): String {
+        val clazzName = clazz.name.toLowerCase().replace("_", "-")
+        val propName = prop.name.replace("_", "-")
+        return "https://docs.godotengine.org/$language/$godotVersion/classes/" +
+                "class_${clazz.name.toLowerCase()}.html#class-$clazzName-property-$propName"
+    }
+
+    fun classUrl(clazz: GodotClass): String {
+        val clazzName = clazz.name.toLowerCase().replace("_", "-")
+        return "https://docs.godotengine.org/$language/$godotVersion/classes/" +
+                "class_${clazz.name.toLowerCase()}.html"
+    }
+
+    fun methodUrl(clazz: GodotClass, method: GodotMethod): String {
+        val clazzName = clazz.name.toLowerCase().replace("_", "-")
+        val methodName = method.name.replace("_", "-")
+        return "https://docs.godotengine.org/$language/$godotVersion/classes/" +
+                "class_${clazz.name.toLowerCase()}.html#class-$clazzName-method-$methodName"
+    }
+
     private val godot = "structure"
     private val cinterop = "kotlinx.cinterop"
 

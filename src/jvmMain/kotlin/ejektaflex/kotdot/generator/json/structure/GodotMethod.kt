@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName
 import com.squareup.kotlinpoet.*
 import ejektaflex.kotdot.generator.json.NativeCommon
 import ejektaflex.kotdot.generator.json.reg.TypeRegistry
-import kotlin.reflect.KClass
 
 data class GodotMethod(
     val name: String = "UNDEF_NAME",
@@ -34,7 +33,17 @@ data class GodotMethod(
         }
 
 
-    private fun genPtrCall(builder: FunSpec.Builder) {
+    fun returnArg(context: FunSpec.Builder, i: Int, argument: GodotArgument, argName: String) {
+        context.apply {
+            addStatement("args[$i] = " + when (argument.type) {
+                "bool" -> "cValuesOf($argName.toByte()).getPointer(memScope)"
+                "float", "long", "int" -> "cValuesOf($argName).getPointer(memScope)"
+                else -> "$argName.getMemory(memScope)"
+            })
+        }
+    }
+
+    fun genPtrCall(builder: FunSpec.Builder, singleVarName: String? = null) {
         builder.apply {
 
             // Return block
@@ -54,18 +63,15 @@ data class GodotMethod(
 
             beginControlFlow("memScoped")
 
-
-
             if (arguments.isNotEmpty()) {
                 addStatement("val args = allocArray<${NativeCommon.copaquevar.simpleName}>(${arguments.size + 1})")
 
-
-                arguments.forEachIndexed { i, argument ->
-                    addStatement("args[$i] = " + when (argument.type) {
-                        "bool" -> "cValuesOf(${argument.name}.toByte()).getPointer(memScope)"
-                        "float", "long", "int" -> "cValuesOf(${argument.name}).getPointer(memScope)"
-                        else -> "${argument.name}.getMemory(memScope)"
-                    })
+                if (singleVarName != null && arguments.size == 1) {
+                    returnArg(this, 0, arguments.first(), singleVarName)
+                } else {
+                    arguments.forEachIndexed { i, argument ->
+                        returnArg(this, i, argument, argument.name)
+                    }
                 }
 
                 addStatement("args[${arguments.size}] = null")
@@ -75,23 +81,19 @@ data class GodotMethod(
 
             }
 
-
-
             endControlFlow()
-
         }
     }
 
 
-    fun generate(): FunSpec.Builder {
+    fun generate(document: Boolean = true): FunSpec.Builder {
 
-
-
-
-
-        val func = FunSpec.builder(name).apply {
+        return FunSpec.builder(name).apply {
             returns(returnTypeName)
 
+            if (document) {
+                addKdoc("@see·" + NativeCommon.methodUrl(this@GodotMethod.parentClass, this@GodotMethod))
+            }
 
             // Add arguments to constructor
 
@@ -104,13 +106,6 @@ data class GodotMethod(
             genPtrCall(this)
 
         }
-
-
-        if (!isVirtual) {
-
-        }
-
-        return func
 
     }
 

@@ -48,11 +48,17 @@ data class GodotClass(
             }
         }
 
-    fun generate(): String {
+    fun generate(document: Boolean = true): String {
 
 
         val file = FileSpec.builder("structure", name).apply {
             val newClazz = TypeSpec.classBuilder(name).apply {
+
+                // KDoc
+
+                if (document) {
+                    addKdoc("@see·" + NativeCommon.classUrl(this@GodotClass))
+                }
 
                 // Header / Primary Constructor
 
@@ -109,18 +115,25 @@ data class GodotClass(
                     addFunction(
                             essMethod.generate().build()
                     )
+                }
 
+                for (method in methods) {
                     // Add binding properties
                     companion.addProperty(
                             PropertySpec.builder(
-                                    "bind_${essMethod.name}",
+                                    "bind_${method.name}",
                                     NativeCommon.godotBind
                             ).apply {
                                 addModifiers(KModifier.PRIVATE)
-                                initializer("BindMap[\"${essMethod.bindingName}\"]")
+                                initializer("BindMap[\"${method.bindingName}\"]")
                             }.build()
                     )
+                }
 
+                for (property in properties) {
+                    addProperty(
+                            property.generate().build()
+                    )
                 }
 
                 // Companion Object

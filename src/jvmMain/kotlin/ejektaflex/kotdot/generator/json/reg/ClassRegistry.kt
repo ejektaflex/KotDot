@@ -11,6 +11,8 @@ val content = Gson().fromJson(apifile.readText(), Array<GodotClass>::class.java)
 object ClassRegistry : SimpleRegistry<String, GodotClass>(content.associateBy { it.name }.toMutableMap()) {
     init {
 
+
+
         for ((name, clazz) in delegate) {
 
             // Link class heirarchy
@@ -24,7 +26,10 @@ object ClassRegistry : SimpleRegistry<String, GodotClass>(content.associateBy { 
                 method.parentClass = clazz
             }
 
-
+            // Link properties to classes
+            for (property in clazz.properties) {
+                property.parentClass = clazz
+            }
 
         }
 
