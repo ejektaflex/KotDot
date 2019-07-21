@@ -12,6 +12,10 @@ object TypeRegistry : SimpleRegistry<String, KType>() {
 
     val primitives = mutableListOf<String>()
 
+    val primitiveTypes: List<KType>
+        get() = primitives.map { delegate[it]!! }
+
+
     init {
         mapOf(
                 "void" to Unit::class.createType(),
@@ -30,6 +34,10 @@ object TypeRegistry : SimpleRegistry<String, KType>() {
         } else {
             ClassName("godot", name)
         }
+    }
+
+    fun isPrimitive(type: TypeName): Boolean {
+        return type in primitiveTypes.map { it.asTypeName() }
     }
 
 }

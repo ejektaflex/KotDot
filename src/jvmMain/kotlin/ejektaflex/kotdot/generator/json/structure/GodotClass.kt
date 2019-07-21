@@ -54,6 +54,8 @@ data class GodotClass(
         val file = FileSpec.builder("structure", name).apply {
             val newClazz = TypeSpec.classBuilder(name).apply {
 
+                addImport("kotlin", "Double", "Boolean")
+
                 // KDoc
 
                 if (document) {
@@ -113,7 +115,7 @@ data class GodotClass(
 
                 for (essMethod in essentialMethods) {
                     addFunction(
-                            essMethod.generate().build()
+                            essMethod.generate(document).build()
                     )
                 }
 

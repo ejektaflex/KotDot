@@ -53,7 +53,7 @@ data class GodotProperty(
                     //addKdoc("@see·[setter](${NativeCommon.methodUrl(parentClass, setterMethod!!)})")
                     val setterArg = setterMethod!!.arguments.first()
                     addParameter("value", TypeRegistry.lookup(setterArg.type))
-                    addComment("Godot Setter: ${setterMethod!!.name}")
+                    //addComment("Godot Setter: ${setterMethod!!.name}")
                     setterMethod!!.genPtrCall(this, "value")
                 }.build()).build()
             }

@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.squareup.kotlinpoet.*
 import ejektaflex.kotdot.generator.json.NativeCommon
 import ejektaflex.kotdot.generator.json.reg.TypeRegistry
+import ejektaflex.kotdot.generator.simpleName
 
 data class GodotMethod(
     val name: String = "UNDEF_NAME",
@@ -44,10 +45,13 @@ data class GodotMethod(
     }
 
     fun genPtrCall(builder: FunSpec.Builder, singleVarName: String? = null) {
+
         builder.apply {
 
+            val returnsVar = returnType != "void"
+
             // Return block
-            if (returnType != "void") {
+            if (returnsVar) {
                 addCode(
                         CodeBlock.of("%L", PropertySpec.builder(
                                 "toReturn",
@@ -59,29 +63,48 @@ data class GodotMethod(
                 ).build()
             }
 
-            addComment(returnTypeName.toString())
 
             beginControlFlow("memScoped")
 
-            if (arguments.isNotEmpty()) {
-                addStatement("val args = allocArray<${NativeCommon.copaquevar.simpleName}>(${arguments.size + 1})")
-
-                if (singleVarName != null && arguments.size == 1) {
-                    returnArg(this, 0, arguments.first(), singleVarName)
-                } else {
-                    arguments.forEachIndexed { i, argument ->
-                        returnArg(this, i, argument, argument.name)
-                    }
-                }
-
-                addStatement("args[${arguments.size}] = null")
-
-                // TODO change null if valid return value
-                addStatement("godot_method_bind_ptrcall(bind_$name, getMemory(), args, null)")
-
+            if (returnsVar) {
+                addStatement(when(val tName = returnTypeName.simpleName)  {
+                    "Double", "Boolean", "Long" -> "val cDestVar = alloc<${tName}Var>()"
+                    else -> "val cDestVar = allocArray<ByteVar>(8)"
+                })
             }
 
+
+            addStatement("val args = allocArray<${NativeCommon.copaquevar.simpleName}>(${arguments.size + 1})")
+
+            if (singleVarName != null && arguments.size == 1) {
+                returnArg(this, 0, arguments.first(), singleVarName)
+            } else {
+                arguments.forEachIndexed { i, argument ->
+                    returnArg(this, i, argument, argument.name)
+                }
+            }
+
+            addStatement("args[${arguments.size}] = null")
+
+            val lastPtrValue = if (returnsVar) "cDestVar" else "null"
+
+            addStatement("godot_method_bind_ptrcall(bind_$name, getMemory(), args, $lastPtrValue)")
+
+            if (returnsVar) {
+                addStatement("toReturn = " + when (returnTypeName.simpleName)  {
+                    "Double", "Boolean", "Long" -> "cDestVar.value"
+                    "String" -> "cDestVar.value.toString()"
+                    else -> "${returnTypeName.simpleName}(cDestVar)"
+                })
+            }
+
+
             endControlFlow()
+
+            if (returnsVar) {
+                addStatement("return toReturn")
+            }
+
         }
     }
 
