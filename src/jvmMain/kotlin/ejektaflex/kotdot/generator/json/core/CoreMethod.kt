@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import ejektaflex.kotdot.generator.json.reg.CTypeRegistry
+import ejektaflex.kotdot.generator.json.reg.CoreClassRegistry
 import ejektaflex.kotdot.generator.toCamelCase
 import kotlin.reflect.KClass
 
@@ -16,6 +17,8 @@ data class CoreMethod(
 
     lateinit var parentClass: CoreClass
 
+    val returnsAnything: Boolean
+        get() = returnType != "void"
 
     val trimmedParentName: String
         get() = name.substringAfter(parentClass.name + "_")
@@ -94,8 +97,14 @@ data class CoreMethod(
                 addParameter(arg.trueName, arg.resolveType())
             }
 
+            beginControlFlow("memScoped")
+
             // Generate API call
-            var proto = if (returnType != "void") "return " else ""
+            var proto = ""//if (returnType != "void") "return " else ""
+
+            if (returnsAnything) {
+                proto += "val apiCall = "
+            }
 
             proto += "GDNativeAPI.$name!!.invoke("
 
@@ -111,17 +120,19 @@ data class CoreMethod(
 
             addStatement(proto)
 
+            if (returnsAnything) {
+                addStatement("val retPtr = a.getPointer(this).pointed")
 
-            // Add arguments to constructor
-
-            /*
-            for (arg in arguments) {
-                addParameter(
-                        ParameterSpec.builder(arg.name, TypeRegistry.lookup(arg.type)).build()
-                )
+                when (returnType) {
+                    "void" -> {}
+                    in CoreClassRegistry -> addStatement("return ${CoreClassRegistry[returnType]!!.ktName}(retPtr)")
+                    else -> addStatement("return retPtr")
+                }
             }
 
-             */
+
+            endControlFlow()
+
 
         }
     }
