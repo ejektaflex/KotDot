@@ -14,18 +14,21 @@ fun simpleDestructor(godotObject: COpaquePointer?, methodData: COpaquePointer?, 
 }
 
 
-internal class GDNativeContainer(
+class GDNativeContainer(
         var apiPointer: CPointer<godot_gdnative_core_api_struct>? = null,
         var initialized: Boolean = false
 )
 
-internal class NativeScriptContainer(
+class NativeScriptContainer(
         var apiPointer: CPointer<godot_gdnative_ext_nativescript_api_struct>? = null,
         var initialized: Boolean = false
 )
 
-private val GDNative = GDNativeContainer()
-private val NativeScript = NativeScriptContainer()
+val GDNative = GDNativeContainer()
+val NativeScript = NativeScriptContainer()
+
+val GDNativeAPI: godot_gdnative_core_api_struct
+    get() = GDNative.apiPointer!!.pointed
 
 @ExportForCppRuntime
 @CName("godot_gdnative_init")

@@ -4,11 +4,11 @@ import com.google.gson.Gson
 import ejektaflex.kotdot.generator.json.structure.GodotClass
 import java.io.File
 
-val apifile = File("godot_headers/api.json")
+private val apifile = File("godot_headers/api.json")
 
-val content = Gson().fromJson(apifile.readText(), Array<GodotClass>::class.java)
+private val content = Gson().fromJson(apifile.readText(), Array<GodotClass>::class.java)
 
-object ClassRegistry : SimpleRegistry<String, GodotClass>(content.associateBy { it.name }.toMutableMap()) {
+object GodotClassRegistry : SimpleRegistry<String, GodotClass>(content.associateBy { it.name }.toMutableMap()) {
     init {
 
 

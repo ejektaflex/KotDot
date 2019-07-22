@@ -1,9 +1,10 @@
 package ejektaflex.kotdot.generator
 
-import ejektaflex.kotdot.generator.json.reg.ClassRegistry
+import ejektaflex.kotdot.generator.json.reg.GDNClassRegistry
 
 fun main() {
 
+    /*
     fun describeClass(named: String) {
         val nodeClazz = ClassRegistry[named]!!
         println("Generated Class Data:")
@@ -17,8 +18,18 @@ fun main() {
         println("(Superclasses       : ${nodeClazz.superclasses.joinToString("->") { it.name }})")
     }
 
-    describeClass("Area")
+    describeClass("YSort")
+     */
 
+    val clazz = GDNClassRegistry["godot_color"]!!
+
+    for (method in clazz.methods) {
+        println(method.ktName)
+    }
+
+    println("###################\n")
+
+    println(clazz.generate())
 
     /*
     for (item in TypeRegistry) {

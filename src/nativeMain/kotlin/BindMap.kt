@@ -1,5 +1,4 @@
-import interop.godot_method_bind
-import interop.godot_method_bind_get_method
+import interop.*
 import kotlinx.cinterop.CPointer
 
 object BindMap {
@@ -10,6 +9,7 @@ object BindMap {
 
         content[key] = godot_method_bind_get_method(sets[0], sets[1])
                 ?: throw Exception("Cannot create a method bind to '$key'!")
+
 
         return content[key]!!
     }
