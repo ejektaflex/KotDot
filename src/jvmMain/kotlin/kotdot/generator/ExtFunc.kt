@@ -1,4 +1,4 @@
-package ejektaflex.kotdot.generator
+package kotdot.generator
 
 import com.squareup.kotlinpoet.TypeName
 

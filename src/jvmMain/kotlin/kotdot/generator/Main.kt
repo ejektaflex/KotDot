@@ -1,8 +1,7 @@
-package ejektaflex.kotdot.generator
+package kotdot.generator
 
-import ejektaflex.kotdot.generator.json.GodotPackager
-import ejektaflex.kotdot.generator.json.reg.CoreClassRegistry
-import ejektaflex.kotdot.generator.json.reg.GodotClassRegistry
+import kotdot.generator.json.reg.CoreClassRegistry
+import kotdot.generator.json.reg.GodotClassRegistry
 import java.io.File
 
 fun main() {

@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("multiplatform") version "1.3.41"
@@ -7,6 +6,9 @@ plugins {
 repositories {
     mavenCentral()
 }
+
+// Determine host preset.
+val hostOs = System.getProperty("os.name")
 
 kotlin {
 
@@ -25,8 +27,6 @@ kotlin {
         }
     }
 
-    // Determine host preset.
-    val hostOs = System.getProperty("os.name")
 
     // Create target for the host platform.
     val hostTarget = when {
@@ -52,6 +52,27 @@ kotlin {
         throw Exception("Host OS '$hostOs' is not supported in Kotlin/Native $project.")
     }
 
+}
+
+task("moveSharedLib") {
+    group = "kotdot"
+    
+    val dynLibName = when {
+        hostOs.startsWith("Windows") -> "godot_kotlin.dll"
+        else -> throw Exception("Can't move shared libs for other OS's yet.")
+    }
+    val libFile = File("build/bin/native/releaseShared", dynLibName)
+
+    val godotLocation = File(ext.properties["godotLocation"].toString(), dynLibName)
+
+    // Delete file if it exists
+    if (godotLocation.exists()) {
+        godotLocation.delete()
+    }
+    
+    libFile.copyTo(godotLocation)
+
+    //libFile.copyTo(godotLocation)
 }
 
 
