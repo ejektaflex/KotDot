@@ -1,7 +1,9 @@
 package ejektaflex.kotdot.generator
 
+import ejektaflex.kotdot.generator.json.GodotPackager
 import ejektaflex.kotdot.generator.json.reg.CoreClassRegistry
 import ejektaflex.kotdot.generator.json.reg.GodotClassRegistry
+import java.io.File
 
 fun main() {
 
@@ -36,6 +38,13 @@ fun main() {
 
     //describeClass("Node")
     describeCore("godot_vector2")
+
+
+
+    val outputLocation = File("build", "out").apply { mkdirs() }
+
+    // Generates all core class data and throws it into build/out. Won't work yet for some/many classes
+    //GodotPackager.generateGodotClasses(outputLocation)
 
 
 

@@ -21,6 +21,11 @@ data class CoreArgument(val rawType: String, val name: String) {
         return typeMatcher.matchEntire(rawType)?.groupValues?.get(2)!!
     }
 
+    val isCoreType: Boolean
+        get() {
+            return getRealTypeStr() in CoreClassRegistry
+        }
+
     fun resolveType(): ClassName {
         val realType = getRealTypeStr()
         return ClassName("", if (realType in CTypeRegistry.keys) {

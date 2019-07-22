@@ -100,7 +100,12 @@ data class CoreMethod(
             proto += "GDNativeAPI.$name!!.invoke("
 
 
-            proto += coreArguments.joinToString(", ") { it.trueName }
+            proto += coreArguments.joinToString(", ") {
+                it.trueName + when {
+                    it.isCoreType && it.trueName != "value.ptr" -> ".value.ptr"
+                    else -> ""
+                }
+            }
 
             proto += ")"
 
