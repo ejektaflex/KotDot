@@ -21,7 +21,7 @@ fun main() {
     describeClass("YSort")
      */
 
-    val clazz = GDNClassRegistry["godot_color"]!!
+    val clazz = GDNClassRegistry["godot_vector2"]!!
 
     for (method in clazz.methods) {
         println(method.ktName)

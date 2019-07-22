@@ -66,6 +66,11 @@ fun godotNativescriptInit(pHandle: COpaquePointer?) {
     val nativeApi = NativeScript.apiPointer?.pointed
     nativeApi?.godot_nativescript_register_class?.invoke(pHandle, CLASS_NAME, REFERENCE_VALUE, instanceFunc.readValue(), destroy.readValue())
 
+    // Test Code
+    val vect = TestVector(150f, 200f)
+    println("X: " + vect.getX())
+    // Finished Test Code
+
     println("Godot-Kotlin NativeScript v${nativeApi?.version?.major}.${nativeApi?.version?.minor} Init Completed")
 }
 
