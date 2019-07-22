@@ -11,8 +11,7 @@ private val content = Gson().fromJson(apifile.readText(), Array<GodotClass>::cla
 object GodotClassRegistry : SimpleRegistry<String, GodotClass>(content.associateBy { it.name }.toMutableMap()) {
     init {
 
-
-
+        // On creation of class registry, link class/method/property hierarchy
         for ((name, clazz) in delegate) {
 
             // Link class heirarchy

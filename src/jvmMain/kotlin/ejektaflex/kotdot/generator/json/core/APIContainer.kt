@@ -4,10 +4,10 @@ data class APIContainer(
         val type: String,
         val version: APIVersion,
         val next: APIContainer? = null,
-        val api: List<APIMethod>
+        val api: List<CoreMethod>
 ) {
-    val allMethods: List<APIMethod>
+    val allMethods: List<CoreMethod>
         get() {
-            return mutableListOf<APIMethod>() + api + (next?.api ?: listOf())
+            return mutableListOf<CoreMethod>() + api + (next?.api ?: listOf())
         }
 }

@@ -5,6 +5,7 @@ import com.squareup.kotlinpoet.*
 import ejektaflex.kotdot.generator.json.NativeCommon
 import ejektaflex.kotdot.generator.json.reg.TypeRegistry
 import ejektaflex.kotdot.generator.simpleName
+import ejektaflex.kotdot.generator.toCamelCase
 
 data class GodotMethod(
     val name: String = "UNDEF_NAME",
@@ -42,6 +43,29 @@ data class GodotMethod(
                 else -> "$argName.getMemory(memScope)"
             })
         }
+    }
+
+    fun generate(document: Boolean = true): FunSpec.Builder {
+
+        return FunSpec.builder(name.toCamelCase()).apply {
+            returns(returnTypeName)
+
+            if (document) {
+                addKdoc("@see·" + NativeCommon.methodUrl(this@GodotMethod.parentClass, this@GodotMethod))
+            }
+
+            // Add arguments to constructor
+
+            for (arg in arguments) {
+                addParameter(
+                        ParameterSpec.builder(arg.name, TypeRegistry.lookup(arg.type)).build()
+                )
+            }
+
+            genPtrCall(this)
+
+        }
+
     }
 
     fun genPtrCall(builder: FunSpec.Builder, singleVarName: String? = null) {
@@ -98,7 +122,6 @@ data class GodotMethod(
                 })
             }
 
-
             endControlFlow()
 
             if (returnsVar) {
@@ -109,27 +132,6 @@ data class GodotMethod(
     }
 
 
-    fun generate(document: Boolean = true): FunSpec.Builder {
 
-        return FunSpec.builder(name).apply {
-            returns(returnTypeName)
-
-            if (document) {
-                addKdoc("@see·" + NativeCommon.methodUrl(this@GodotMethod.parentClass, this@GodotMethod))
-            }
-
-            // Add arguments to constructor
-
-            for (arg in arguments) {
-                addParameter(
-                        ParameterSpec.builder(arg.name, TypeRegistry.lookup(arg.type)).build()
-                )
-            }
-
-            genPtrCall(this)
-
-        }
-
-    }
 
 }

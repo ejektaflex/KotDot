@@ -2,9 +2,9 @@ package ejektaflex.kotdot.generator.json.core
 
 import com.squareup.kotlinpoet.ClassName
 import ejektaflex.kotdot.generator.json.reg.CTypeRegistry
-import ejektaflex.kotdot.generator.json.reg.GDNClassRegistry
+import ejektaflex.kotdot.generator.json.reg.CoreClassRegistry
 
-data class APIArgument(val rawType: String, val name: String) {
+data class CoreArgument(val rawType: String, val name: String) {
 
     val typeMatcher = Regex("(const )*([a-z_0-9]+)( \\*)*")
 
@@ -20,7 +20,7 @@ data class APIArgument(val rawType: String, val name: String) {
         return ClassName("godot", if (realType in CTypeRegistry.keys) {
             CTypeRegistry[realType].toString()
         } else {
-            GDNClassRegistry[realType]!!.ktName
+            CoreClassRegistry[realType]!!.ktName
         })
     }
 

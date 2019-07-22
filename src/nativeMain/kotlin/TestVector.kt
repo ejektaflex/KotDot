@@ -1,6 +1,10 @@
 import interop.godot_vector2
 import kotlinx.cinterop.*
 
+/**
+ * This is just a test class - it gets created and run in GDNative::godotNativescriptInit
+ * to ensure that this is working
+ */
 class TestVector() {
     val value = nativeHeap.alloc<godot_vector2>()
 

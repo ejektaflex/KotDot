@@ -1,4 +1,4 @@
 package ejektaflex.kotdot.generator.json.core
 
-object APIGlobal : APIClass("Global") {
+object CoreGlobal : CoreClass("Global") {
 }

@@ -1,30 +1,24 @@
 package ejektaflex.kotdot.generator.json.core
 
 import com.google.gson.annotations.SerializedName
-import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FunSpec
-import com.squareup.kotlinpoet.ParameterSpec
-import com.squareup.kotlinpoet.TypeName
-import ejektaflex.kotdot.generator.json.NativeCommon
 import ejektaflex.kotdot.generator.json.reg.CTypeRegistry
-import ejektaflex.kotdot.generator.json.reg.GDNClassRegistry
-import ejektaflex.kotdot.generator.json.reg.TypeRegistry
 import ejektaflex.kotdot.generator.toCamelCase
 
-data class APIMethod(
+data class CoreMethod(
         val name: String,
         @SerializedName("return_type")
         val returnType: String,
         val arguments: List<List<String>>
 ) {
 
-    lateinit var parentClass: APIClass
+    lateinit var parentClass: CoreClass
 
     val ktName: String
         get() = name.substringAfter(parentClass.name + "_").toCamelCase()
 
-    val apiArguments: List<APIArgument>
-        get() = arguments.map { APIArgument(it[0], it[1]) }
+    val coreArguments: List<CoreArgument>
+        get() = arguments.map { CoreArgument(it[0], it[1]) }
 
 
     fun generate(initFunc: Boolean = false, dropFirst: Boolean = true): FunSpec.Builder {
@@ -43,15 +37,16 @@ data class APIMethod(
 
             // Class methods can drop first method, as it's self referential
             val iterArgs = if (dropFirst) {
-                apiArguments.drop(1)
+                coreArguments.drop(1)
             } else {
-                apiArguments
+                coreArguments
             }
 
             for (arg in iterArgs) {
                 addParameter(arg.trueName, arg.resolveType())
             }
 
+            // Generate API call
             var proto = "GDNativeAPI.$name!!("
 
 
@@ -65,6 +60,7 @@ data class APIMethod(
             }
 
             proto += ")"
+
             addStatement(proto)
 
 

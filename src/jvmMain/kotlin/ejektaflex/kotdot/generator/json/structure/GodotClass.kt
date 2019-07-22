@@ -113,14 +113,17 @@ data class GodotClass(
 
                 // Body
 
+
+                // Add all essential methods to class
                 for (essMethod in essentialMethods) {
                     addFunction(
                             essMethod.generate(document).build()
                     )
                 }
 
+
+                // Add binding properties to Companion object
                 for (method in methods) {
-                    // Add binding properties
                     companion.addProperty(
                             PropertySpec.builder(
                                     "bind_${method.name}",
@@ -132,16 +135,14 @@ data class GodotClass(
                     )
                 }
 
+                // Add all properties to class
                 for (property in properties) {
                     addProperty(
                             property.generate().build()
                     )
                 }
 
-                // Companion Object
-
-
-
+                // Add Companion Object
                 addType(companion.build())
 
 

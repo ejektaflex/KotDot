@@ -2,17 +2,17 @@ package ejektaflex.kotdot.generator.json.core
 
 import com.squareup.kotlinpoet.*
 
-open class APIClass(val name: String) {
+open class CoreClass(val name: String) {
 
     val ktName: String
         get() = name.substringAfter("godot_").capitalize()
 
-    val methods = mutableListOf<APIMethod>()
+    val methods = mutableListOf<CoreMethod>()
 
-    val normalMethods: List<APIMethod>
+    val normalMethods: List<CoreMethod>
         get() = methods - newClassMethod
 
-    val newClassMethod: APIMethod
+    val newClassMethod: CoreMethod
         get() {
             return methods.first { it.name == "${name}_new" }
         }
