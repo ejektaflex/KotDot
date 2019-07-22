@@ -1,4 +1,4 @@
-package ejektaflex.kotdot.generator.json.reg
+package kotdot.generator.json.reg
 
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.TypeName

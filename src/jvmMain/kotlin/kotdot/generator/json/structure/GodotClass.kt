@@ -1,8 +1,8 @@
-package ejektaflex.kotdot.generator.json.structure
+package kotdot.generator.json.structure
 
 import com.google.gson.annotations.SerializedName
 import com.squareup.kotlinpoet.*
-import ejektaflex.kotdot.generator.json.NativeCommon
+import kotdot.generator.json.NativeCommon
 
 data class GodotClass(
 

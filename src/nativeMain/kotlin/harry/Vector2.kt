@@ -1,7 +1,7 @@
 package godot
 
-import godotapi.godot_variant
-import godotapi.godot_vector2
+import interop.godot_variant
+import interop.godot_vector2
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.invoke
 import kotlinx.cinterop.reinterpret

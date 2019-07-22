@@ -1,9 +1,9 @@
-package ejektaflex.kotdot.generator.json.reg
+package kotdot.generator.json.reg
 
 import com.google.gson.Gson
-import ejektaflex.kotdot.generator.json.core.CoreClass
-import ejektaflex.kotdot.generator.json.core.CoreGlobal
-import ejektaflex.kotdot.generator.json.core.GDNativeAPIObject
+import kotdot.generator.json.core.CoreClass
+import kotdot.generator.json.core.CoreGlobal
+import kotdot.generator.json.core.GDNativeAPIObject
 import java.io.File
 
 private val apifile = File("godot_headers/gdnative_api.json")

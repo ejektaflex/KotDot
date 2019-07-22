@@ -1,11 +1,10 @@
-package ejektaflex.kotdot.generator.json.structure
+package kotdot.generator.json.structure
 
-import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.PropertySpec
-import ejektaflex.kotdot.generator.json.NativeCommon
-import ejektaflex.kotdot.generator.json.reg.TypeRegistry
+import kotdot.generator.json.NativeCommon
+import kotdot.generator.json.reg.TypeRegistry
 
 data class GodotProperty(
         val name: String,

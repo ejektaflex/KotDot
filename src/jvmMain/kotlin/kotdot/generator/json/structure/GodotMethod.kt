@@ -1,11 +1,11 @@
-package ejektaflex.kotdot.generator.json.structure
+package kotdot.generator.json.structure
 
 import com.google.gson.annotations.SerializedName
 import com.squareup.kotlinpoet.*
-import ejektaflex.kotdot.generator.json.NativeCommon
-import ejektaflex.kotdot.generator.json.reg.TypeRegistry
-import ejektaflex.kotdot.generator.simpleName
-import ejektaflex.kotdot.generator.toCamelCase
+import kotdot.generator.json.NativeCommon
+import kotdot.generator.json.reg.TypeRegistry
+import kotdot.generator.simpleName
+import kotdot.generator.toCamelCase
 
 data class GodotMethod(
     val name: String = "UNDEF_NAME",

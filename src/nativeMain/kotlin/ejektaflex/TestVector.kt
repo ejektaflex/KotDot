@@ -1,8 +1,10 @@
+package ejektaflex
+
 import interop.godot_vector2
 import kotlinx.cinterop.*
 
 /**
- * This is just a test class - it gets created and run in GDNative::godotNativescriptInit
+ * This is just a test class - it gets created and run in GDNative::ejektaflex.godotNativescriptInit
  * to ensure that this is working
  */
 class TestVector() {
@@ -29,7 +31,7 @@ class TestVector() {
     }
 
     override fun toString(): String {
-        return "TestVector[x=${getX()}, y=${getY()}]"
+        return "ejektaflex.TestVector[x=${getX()}, y=${getY()}]"
     }
 
 

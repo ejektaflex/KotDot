@@ -1,3 +1,5 @@
+package ejektaflex
+
 import kotlinx.cinterop.*
 import interop.*
 import platform.posix.strcpy

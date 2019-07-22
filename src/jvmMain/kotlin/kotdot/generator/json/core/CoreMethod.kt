@@ -1,11 +1,11 @@
-package ejektaflex.kotdot.generator.json.core
+package kotdot.generator.json.core
 
 import com.google.gson.annotations.SerializedName
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
-import ejektaflex.kotdot.generator.json.reg.CTypeRegistry
-import ejektaflex.kotdot.generator.json.reg.CoreClassRegistry
-import ejektaflex.kotdot.generator.toCamelCase
+import kotdot.generator.json.reg.CTypeRegistry
+import kotdot.generator.json.reg.CoreClassRegistry
+import kotdot.generator.toCamelCase
 import kotlin.reflect.KClass
 
 data class CoreMethod(

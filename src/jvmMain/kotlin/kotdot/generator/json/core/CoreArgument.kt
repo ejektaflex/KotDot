@@ -1,8 +1,8 @@
-package ejektaflex.kotdot.generator.json.core
+package kotdot.generator.json.core
 
 import com.squareup.kotlinpoet.ClassName
-import ejektaflex.kotdot.generator.json.reg.CTypeRegistry
-import ejektaflex.kotdot.generator.json.reg.CoreClassRegistry
+import kotdot.generator.json.reg.CTypeRegistry
+import kotdot.generator.json.reg.CoreClassRegistry
 
 data class CoreArgument(val rawType: String, val name: String) {
 

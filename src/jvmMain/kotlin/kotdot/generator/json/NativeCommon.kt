@@ -1,9 +1,9 @@
-package ejektaflex.kotdot.generator.json
+package kotdot.generator.json
 
 import com.squareup.kotlinpoet.ClassName
-import ejektaflex.kotdot.generator.json.structure.GodotClass
-import ejektaflex.kotdot.generator.json.structure.GodotMethod
-import ejektaflex.kotdot.generator.json.structure.GodotProperty
+import kotdot.generator.json.structure.GodotClass
+import kotdot.generator.json.structure.GodotMethod
+import kotdot.generator.json.structure.GodotProperty
 
 object NativeCommon {
 

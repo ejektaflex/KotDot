@@ -1,3 +1,5 @@
+package ejektaflex
+
 import interop.*
 import kotlinx.cinterop.CPointer
 

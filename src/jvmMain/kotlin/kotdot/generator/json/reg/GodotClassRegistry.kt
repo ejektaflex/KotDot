@@ -1,7 +1,7 @@
-package ejektaflex.kotdot.generator.json.reg
+package kotdot.generator.json.reg
 
 import com.google.gson.Gson
-import ejektaflex.kotdot.generator.json.structure.GodotClass
+import kotdot.generator.json.structure.GodotClass
 import java.io.File
 
 private val apifile = File("godot_headers/api.json")

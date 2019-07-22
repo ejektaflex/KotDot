@@ -1,4 +1,4 @@
-package ejektaflex.kotdot.generator.json.core
+package kotdot.generator.json.core
 
 data class APIContainer(
         val type: String,

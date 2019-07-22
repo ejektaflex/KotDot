@@ -1,4 +1,4 @@
-package ejektaflex.kotdot.generator.json.structure
+package kotdot.generator.json.structure
 
 class GodotAny {
 }

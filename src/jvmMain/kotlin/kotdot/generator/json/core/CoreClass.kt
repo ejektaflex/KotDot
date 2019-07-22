@@ -1,8 +1,6 @@
-package ejektaflex.kotdot.generator.json.core
+package kotdot.generator.json.core
 
 import com.squareup.kotlinpoet.*
-import ejektaflex.kotdot.generator.json.reg.CTypeRegistry
-import ejektaflex.kotdot.generator.json.reg.CoreClassRegistry
 
 open class CoreClass(val name: String) {
 
