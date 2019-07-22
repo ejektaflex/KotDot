@@ -8,6 +8,8 @@ import kotlinx.cinterop.*
 class TestVector() {
     val value = nativeHeap.alloc<godot_vector2>()
 
+
+
     constructor(x: Float, y: Float) : this() {
         GDNativeAPI.godot_vector2_new!!(value.ptr, x, y)
     }

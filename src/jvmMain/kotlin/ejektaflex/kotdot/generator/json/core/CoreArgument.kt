@@ -9,7 +9,13 @@ data class CoreArgument(val rawType: String, val name: String) {
     val typeMatcher = Regex("(const )*([a-z_0-9]+)( \\*)*")
 
     val trueName: String
-        get() = name.substringAfter("p_")
+        get() {
+            return if (name == "p_self" || name == "r_dest") {
+                "value.ptr"
+            } else {
+                name.substringAfter("p_")
+            }
+        }
 
     fun getRealTypeStr(): String {
         return typeMatcher.matchEntire(rawType)?.groupValues?.get(2)!!
@@ -17,7 +23,7 @@ data class CoreArgument(val rawType: String, val name: String) {
 
     fun resolveType(): ClassName {
         val realType = getRealTypeStr()
-        return ClassName("godot", if (realType in CTypeRegistry.keys) {
+        return ClassName("", if (realType in CTypeRegistry.keys) {
             CTypeRegistry[realType].toString()
         } else {
             CoreClassRegistry[realType]!!.ktName

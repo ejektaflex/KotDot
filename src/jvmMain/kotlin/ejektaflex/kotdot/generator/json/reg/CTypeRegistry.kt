@@ -25,7 +25,7 @@ object CTypeRegistry : SimpleRegistry<String, KType>() {
         return if (name in delegate) {
             delegate[name]!!.asTypeName()
         } else {
-            ClassName("godot", name)
+            ClassName("", CoreClassRegistry[name]!!.ktName)
         }
     }
 

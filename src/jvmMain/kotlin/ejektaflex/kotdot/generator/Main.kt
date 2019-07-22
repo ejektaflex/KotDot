@@ -25,10 +25,10 @@ fun main() {
         val clazz = CoreClassRegistry[named]!!
 
         for (method in clazz.methods) {
-            println(method.ktName)
+            //println(method.ktName)
         }
 
-        println("###################\n")
+        //println("###################\n")
 
         println(clazz.generate())
     }
